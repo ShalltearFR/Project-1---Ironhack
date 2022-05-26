@@ -1,0 +1,31 @@
+body,html, div, canvas{margin :0; padding : 0; box-sizing: border-box;}
+body{background-color: #56587b;}
+@media(max-width:899px){
+    div{
+        font-size: 32px;
+        display: flex;
+        text-align: center;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
+        border: solid 1px black;
+
+    }
+
+    canvas{
+        display: none;
+    }
+}
+
+@media(min-width:900px){
+    div{
+        display: none;
+    }
+
+    canvas{
+        display: block;
+        width: 100vw;
+        border: solid 1px red;
+    }
+}
