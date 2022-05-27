@@ -4,10 +4,15 @@ let canvas = document.querySelector("canvas").getContext("2d")
 let fishList = []
 const gametick = new GameTick()
 let gameTickInterval
-const spawnLimit = 20
-let spawnCount = 0
+const spawnLimit = 30
 
-function backgroundLoading(){
+function start(){ // Demarre le jeu
+    backgroundLoading()
+    fishSpawn()
+    gameTickInterval = setInterval(gameTick, Math.floor((Math.random() * 800) + 20))
+}
+
+function backgroundLoading(){ // Chargement de l'arrière plan du jeu
     let background = new Image()
     background.src = "https://res.cloudinary.com/shalltear/image/upload/v1653559679/background_dxb3v0.png"
     
@@ -16,13 +21,7 @@ function backgroundLoading(){
         }
 }
 
-function start(){
-    backgroundLoading()
-    firstSpawn()
-    gameTickInterval = setInterval(gameTick, Math.floor((Math.random() * 800) + 800))
-}
-
-function firstSpawn(){
+ function fishSpawn(){ // Fait spawner les poissons
     let fish = new Fish()
     let img = new Image()
     let spawnResult = fish.spawn()
@@ -30,189 +29,98 @@ function firstSpawn(){
         x: spawnResult[0],
         y: spawnResult[1]
     }
-    console.log("longueur =",fishList.length)
-    if (spawnLimit > spawnCount){
-        
-
-        if (fishList.length === 0){
-            console.log("1er poisson")
+    if (spawnLimit > fishList.length){ // S'il n'a pas atteint son objectif de limite de spawn
+        if (fishList.length === 0){ // Fait apparaitre le 1er poisson, essentiel sinon ne fonctionne pas pour la suite
             img.src = fish.img
             img.onload = ()=>{
                 // 180 & 400 pos min -- 1175 & 695 pos max
-                canvas.drawImage(img, position.x,position.y)
-        
-                canvas.strokeRect(position.x - 50, position.y, fish.width + (2 * 50), fish.height);
-                canvas.strokeRect(position.x, position.y, 54, 21);   
+                canvas.drawImage(img, position.x,position.y) 
                 fishList.push(fish)
-                firstSpawn()
-                spawnCount++
-                // setTimeout(()=>{
-                //     firstSpawn()
-                // }, 1200)
-
-            }
+                fishSpawn()
+            } 
         } else {
-            for (let i = 0; i < fishList.length; i++){
-                if (spawnCount <= 20){
-                    console.log("fish.positionX =",fish.positionX, "fishList[i].moveLimit.xMin =", fishList[i].moveLimit.xMin)
-                    console.log(fishList)
-                    if (fish.moveLimit.xMax < fishList[i].moveLimit.xMin){
-                        console.log("1er test check")
-                        if (fish.moveLimit.xMin > fishList[i].moveLimit.xMax){
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                            
-                            console.log("oui")
-                            img.src = fish.img
-                            img.onload = ()=>{
-                                // 180 & 400 pos min -- 1175 & 695 pos max
-                                canvas.drawImage(img, position.x,position.y)
-                        
-                                canvas.strokeRect(position.x - 50, position.y, fish.width + (2 * 50), fish.height);
-                                canvas.strokeRect(position.x, position.y, 54, 21);   
-                                fishList.push(fish)
-                                // setTimeout(()=>{
-                                    spawnCount++
-                                    firstSpawn()
-                                // }, 60)
-                                
-                
-                            }    
+            let j = 0 // Permet de verifier si le spawn du poisson est possible après avoir verifié chaque emplacement des poissons deja placés
+            for (let i = 0; i < fishList.length; i++){ // Dans chaque elements dans la liste de poisson
+                if (fishList[i].checkSpawnPossibility(fish, fishList[i])){ // Verifie si le poisson peut spawner dans chaque elements
+                    j++
+                    if (j === fishList.length){ // Si toutes les conditions de spawn sont possible, fait spawner le poisson
+                        j = 0
+                        img.src = fish.img
+                        img.onload = ()=>{
+                            // 180 & 400 pos min -- 1175 & 695 pos max
+                            canvas.drawImage(img, position.x,position.y)
+                            canvas.strokeRect(position.x - 50, position.y, fish.width + (2 * 50), fish.height); // Zone de deplacement max
+                            canvas.strokeRect(position.x, position.y, 54, 21);  // Hitbox
+                            fishList.push(fish)                              
+                            fishSpawn()
                         }
-                    } else{
-                        console.log("non")
-                        //firstSpawn()
-                    }
-
-                }else{
-                    break;
+                    } 
+                } else{
+                    console.log("Espace deja occupé - Respawn d'un poisson")
+                    fishSpawn()
+                    break
                 }
-                // console.log("autres poisson")
-            // fishList.forEach((el) =>{
             }
         }
+    } else if (spawnLimit === fishList.length){
+        console.log("Liste des poissons = ",fishList)
     }
 }
 
-
-
-
-
-
-    // for (let i = 0; i < 20; i++){
-
-        
-    // }
-    // console.log(fishList)
-
-function gameTick(){
-     setTimeout(movefish, gametick.random()) // Deplace un poisson aléatoire entre 5 et 10 secs
+function gameTick(){ // Deplace un poisson aléatoire
+     setTimeout(movefish, gametick.random()) 
 }
 
-start()
-
 function movefish(){
-    console.log("TICK")
-    let ramdomIndex = Math.floor(Math.random() * fishList.length)
-
-    // console.log(fishList[ramdomIndex])
+    console.log("GAME TICK")
+    let ramdomIndex = Math.floor(Math.random() * fishList.length) // Selectionne un poisson aleatoire
 
     if (!fishList[ramdomIndex].isMoving){ // Si le poisson n'est pas en mouvement
-        // console.log("not moving")
         let direction = fishList[ramdomIndex].movementDirection()
-        // console.log("direction variable =", direction)
         
         if (direction === "left"){ 
-            // console.log("left")
             // Dirige le poisson vers la gauche
-            // if (!fishList[ramdomIndex].isMoving){ // Si le poisson n'est pas en mouvement
                 requestAnimationFrame(() =>{
                     fishAnimation(ramdomIndex, "left")
                 })
                 fishList[ramdomIndex].isMoving = true
             // } 
         } else if (direction === "right"){
-            // console.log("right")
             // Dirige le poisson vers la droite
-            // if (!fishList[ramdomIndex].isMoving){ // Si le poisson n'est pas en mouvement
-                requestAnimationFrame(() =>{
-                    fishAnimation(ramdomIndex, "right")
-                })
-                fishList[ramdomIndex].isMoving = true
-            // }
+            requestAnimationFrame(() =>{
+                fishAnimation(ramdomIndex, "right")
+            })
+            fishList[ramdomIndex].isMoving = true
         }
     } 
 }
 
-function fishAnimation(index, direction){
+function fishAnimation(index, direction){ // Gère l'animation du poisson
     let img = new Image()
     img.src = fishList[index].img
-    // console.log("direction fishlist[" + index + "] = ",direction)
-    //console.log(fishList)
-    if (direction === "left" && !fishList[index].checkLimitMovement()){
-        // console.log("left") 
+
+    if (direction === "left" && !fishList[index].checkLimitMovement()){ // Si la direction est à gauche et que fishList[i].isMoving est actif
         img.onload = ()=>{//         X                             Y                       width                  height
             canvas.clearRect(fishList[index].positionX , fishList[index].positionY, fishList[index].width, fishList[index].height)
-            //console.log("update left")
-            canvas.drawImage(img, fishList[index].positionX - 1,fishList[index].positionY)
-            fishList[index].updateAnimation("left")
+            canvas.drawImage(img, fishList[index].positionX - 1,fishList[index].positionY) // Deplace le poisson dans la page HTML
+            fishList[index].updateAnimation("left") // Met à jour la position du poisson dans le tableau
         }
-    }else if (direction === "right" && !fishList[index].checkLimitMovement()){
-        //console.log("right")
+    }else if (direction === "right" && !fishList[index].checkLimitMovement()){// Si la direction est à droite et que fishList[i].isMoving est actif
         img.onload = ()=>{//         X                             Y                       width                  height
             canvas.clearRect(fishList[index].positionX, fishList[index].positionY, fishList[index].width, fishList[index].height)
-            //console.log("update left")
-            canvas.drawImage(img, fishList[index].positionX + 1,fishList[index].positionY)
-            fishList[index].updateAnimation("right")
+            canvas.drawImage(img, fishList[index].positionX + 1,fishList[index].positionY) // Deplace le poisson dans la page HTML
+            fishList[index].updateAnimation("right") //Met à jour la position du poisson dans le tableau
         }
     }
 
-
-    // if (direction === "left" && fishList[index].moveLimit.xMin > fishList[index].positionX)
-
-    // requestAnimationFrame(() =>{
-    //     fishAnimation(index, direction)
-    // })
-
-    // if (direction === "right" && fishList[index].moveLimit.xMax < fishList[index].positionX)
-    // requestAnimationFrame(() =>{
-    //     fishAnimation(index, direction)
-    // })
-
-    if (!fishList[index].checkLimitMovement()){
-        setTimeout(()=>{
-            requestAnimationFrame(() =>{
-                fishAnimation(index, direction)
-            })
-        }, gameTick.time * 1200)
+    if (!fishList[index].checkLimitMovement()){ // Si le poisson n'est pas dans sa limite
+        requestAnimationFrame(() =>{
+            fishAnimation(index, direction) // Rejoue l'animation
+        })
     }
-    if (fishList[index].checkLimitMovement()){
-
-        setTimeout(()=>{
-            fishList[index].isMoving = false
-        }, gameTick.time * Math.floor(Math.random() * 1200) * 1200 + 5000)
+    if (fishList[index].checkLimitMovement()){ // Si le poisson est dans sa limite
+        fishList[index].isMoving = false // Rend de nouveau disponible le choix de direction du poisson
     }
-
 }
 
-
-
-export {canvas}
+start()

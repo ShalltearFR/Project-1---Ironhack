@@ -24,20 +24,16 @@ export class Fish{
         this.moveLimit.xMin = this.positionX - 50
         this.moveLimit.xMax = this.positionX + this.width + 50
         
-        console.log("initial Direction =", this.moveDirection)
         return [randomX, randomY]
     }
 
     movementDirection(){
         let random = Math.round(Math.random() * 1)
-        //console.log("random =",random)
         if (random === 1){
             this.moveDirection = "left"
-            console.log("moooooooooove left")
             return "left"
         } else {
             this.moveDirection = "right"
-            console.log("moooooooooove right")
             return "right"
         }
     }
@@ -53,21 +49,32 @@ export class Fish{
     checkLimitMovement(){
         if (this.positionX <= this.moveLimit.xMin){
             if (this.moveDirection === "left"){
-                // this.moveDirection = "right"
                 return true
             }
         }
 
         if (this.positionX >= (this.moveLimit.xMax - this.width)){
             if (this.moveDirection === "right"){
-                // this.moveDirection = "left"
                 return true
             }
         }
-
         return false
     }
 
+    checkSpawnPossibility(fish, list){
+        return !(
+            (this.positionY + this.height) > fish.positionY &&
+            this.positionY < (fish.positionY + fish.height) &&
+            this.moveLimit.xMax > fish.moveLimit.xMin &&
+            this.moveLimit.xMin < fish.moveLimit.xMax
+          );
+
+        //   this.bottom() > obstacle.top() &&
+        //   this.top() < obstacle.bottom() &&
+        //   this.right() > obstacle.left() &&
+        //   this.left() < obstacle.right()
+    
+    }
 }
 
 export class Score{
