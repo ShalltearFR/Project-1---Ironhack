@@ -13,9 +13,6 @@ background.src = "https://res.cloudinary.com/shalltear/image/upload/v1653559679/
 
 const strengthBar = document.querySelector("#Strength")
 
-//const strengthBarImg = new Image()
-//strengthBarImg.src = "https://res.cloudinary.com/shalltear/image/upload/v1653664854/Barre_de_force_xd7gdm.png"
-
 function start(){ // Demarre le jeu
     backgroundLoading()
     fishSpawn()
@@ -58,8 +55,8 @@ function backgroundLoading(){ // Chargement de l'arrière plan du jeu
                         img.onload = ()=>{
                             // Zone bac - x180 & y400 pos min -- x1175 & y695 pos max
                             canvas.drawImage(img, position.x,position.y)
-                            canvas.strokeRect(position.x - 50, position.y, fish.width + (2 * 50), fish.height); // Zone de deplacement max
-                            canvas.strokeRect(position.x, position.y, 54, 21);  // Hitbox
+                            //canvas.strokeRect(position.x - 50, position.y, fish.width + (2 * 50), fish.height); // Zone de deplacement max
+                            //canvas.strokeRect(position.x, position.y, 54, 21);  // Hitbox
                             fishList.push(fish)
                             fishSpawn()
                         }
@@ -133,17 +130,7 @@ function fishAnimation(index, direction){ // Gère l'animation du poisson
 }
 
 function updateStrengthUI(){
-    //strengthBarImg.onload = ()=>{
-        strengthBar.style.width = `${(fishingRod.strength / 2)}px`
-
-        //canvas.drawImage(strengthBarImg, 130, 70, 295, 70, 130, 70, (fishingRod.strength / 4), 70)
-        //canvas.drawImage(strengthBarImg, 130, 70, ((fishingRod.strength) / 4), 20)
-
-        //canvas.drawImage(strengthBarImg, 130,    70,            295,               70,    130    , 70   , (fishingRod.strength / 4),    70)
-        //                   src          sx    sy        swidth            sheight      dx         dy          dwidth                dheight
-    //}
-    //canvas.fillRect(130,70,((fishingRod.strength) / 4),    20)
-    //               x   y         width                  height
+    strengthBar.style.width = `${(fishingRod.strength / 2)}px`
 }
 
 

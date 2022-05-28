@@ -19,9 +19,7 @@ body{background-color: #56587b;}
         border: solid 1px black;
     }
 
-    canvas{
-        display: none;
-    }
+    canvas, #StrengthTextBackground, #StrengthText h2, #Strength, #StrengthBackground{ display: none; }
 }
 
 @media(min-width:900px){
@@ -32,7 +30,6 @@ body{background-color: #56587b;}
     canvas{
         display: block;
         width: 100vw;
-        border: solid 1px red;
         object-fit:contain;
         z-index: 1;
     }
@@ -40,7 +37,7 @@ body{background-color: #56587b;}
     #StrengthBar {
         display: block;      
         width: 500px;
-        border: solid 1px lightblue;
+        border: solid 1px gray;
         border-radius: 10px;
         height: 25px;
         background: linear-gradient(90deg, green, yellow, red);
@@ -55,9 +52,9 @@ body{background-color: #56587b;}
         width: 150px;
         height: 35px;
         border-radius: 20px;
-        background-color: white;
+        background: linear-gradient(180deg, white, gray);;
 
-        border: solid 1px black;
+        border: solid 1px gray;
     }
     #StrengthText h2{
         top: 6%;
