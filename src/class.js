@@ -61,7 +61,7 @@ export class Fish{
         return false
     }
 
-    checkSpawnPossibility(fish, list){
+    checkSpawnPossibility(fish){
         return !(
             (this.positionY + this.height) > fish.positionY &&
             this.positionY < (fish.positionY + fish.height) &&
@@ -92,7 +92,22 @@ export class Score{
 }
 
 export class FishingRod{
+    constructor(){
+        this.strength = 0
+        this.isUsing = false
+        this.positionX = null
+        this.positionY = null
+        this.positionYMax = null
+    }
 
+    isTouch(fish){
+        return (
+            this.positionY > fish.positionY &&
+            this.positionY < (fish.positionY + fish.height)&&
+            this.positionX > fish.positionX &&
+            this.positionX < (fish.positionX + fish.width)
+          );
+    }
  }
 
 export class GameTick{

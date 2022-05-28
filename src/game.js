@@ -4,19 +4,24 @@ let canvas = document.querySelector("canvas").getContext("2d")
 let fishList = []
 const gametick = new GameTick()
 let gameTickInterval
-const spawnLimit = 30
+const spawnLimit = 20
+const fishingRod = new (FishingRod)
+let fishingStrengthInterval
+
+const background = new Image()
+background.src = "https://res.cloudinary.com/shalltear/image/upload/v1653559679/background_dxb3v0.png"
+
+const strengthBarImg = new Image()
+strengthBarImg.src = "https://res.cloudinary.com/shalltear/image/upload/v1653664854/Barre_de_force_xd7gdm.png"
 
 function start(){ // Demarre le jeu
     backgroundLoading()
     fishSpawn()
-    gameTickInterval = setInterval(gameTick, Math.floor((Math.random() * 800) + 20))
+    gameTickInterval = setInterval(gameTick, Math.floor((Math.random() * 800) + 20))      
 }
 
 function backgroundLoading(){ // Chargement de l'arrière plan du jeu
-    let background = new Image()
-    background.src = "https://res.cloudinary.com/shalltear/image/upload/v1653559679/background_dxb3v0.png"
-    
-    background.onload = ()=>{
+      background.onload = ()=>{
         canvas.drawImage(background, 0, 0, 1280, 720);
         }
 }
@@ -34,23 +39,24 @@ function backgroundLoading(){ // Chargement de l'arrière plan du jeu
             img.src = fish.img
             img.onload = ()=>{
                 // 180 & 400 pos min -- 1175 & 695 pos max
-                canvas.drawImage(img, position.x,position.y) 
+                canvas.drawImage(img, position.x,position.y)
+                //canvas.strokeRect(position.x - 50, position.y, fish.width + (2 * 50), fish.height); // Zone de deplacement max
+                //canvas.strokeRect(position.x, position.y, 54, 21);  // Hitbox
                 fishList.push(fish)
                 fishSpawn()
             } 
         } else {
             let j = 0 // Permet de verifier si le spawn du poisson est possible après avoir verifié chaque emplacement des poissons deja placés
             for (let i = 0; i < fishList.length; i++){ // Dans chaque elements dans la liste de poisson
-                if (fishList[i].checkSpawnPossibility(fish, fishList[i])){ // Verifie si le poisson peut spawner dans chaque elements
+                if (fishList[i].checkSpawnPossibility(fish)){ // Verifie si le poisson peut spawner dans chaque elements
                     j++
                     if (j === fishList.length){ // Si toutes les conditions de spawn sont possible, fait spawner le poisson
-                        j = 0
                         img.src = fish.img
                         img.onload = ()=>{
-                            // 180 & 400 pos min -- 1175 & 695 pos max
+                            // Zone bac - x180 & y400 pos min -- x1175 & y695 pos max
                             canvas.drawImage(img, position.x,position.y)
-                            canvas.strokeRect(position.x - 50, position.y, fish.width + (2 * 50), fish.height); // Zone de deplacement max
-                            canvas.strokeRect(position.x, position.y, 54, 21);  // Hitbox
+                            //canvas.strokeRect(position.x - 50, position.y, fish.width + (2 * 50), fish.height); // Zone de deplacement max
+                            //canvas.strokeRect(position.x, position.y, 54, 21);  // Hitbox
                             fishList.push(fish)                              
                             fishSpawn()
                         }
@@ -122,5 +128,51 @@ function fishAnimation(index, direction){ // Gère l'animation du poisson
         fishList[index].isMoving = false // Rend de nouveau disponible le choix de direction du poisson
     }
 }
+
+function updateStrengthUI(){
+    //strengthBarImg.onload = ()=>{
+        //canvas.drawImage(strengthBarImg, 130,    70,            295,               70,    130    , 70   , ((fishingRod.strength) / 4),    70)
+
+        //canvas.drawImage(strengthBarImg, 130, 70, 295, 70, 130, 70, ((fishingRod.strength) / 4), 70)
+        canvas.drawImage(strengthBarImg, 130, 70, ((fishingRod.strength) / 4), 20)
+
+        //                   src          sx    sy        swidth                sheight   dx         dy          dwidth                sheight
+    //}
+    //canvas.fillRect(130,70,((fishingRod.strength) / 4),    20)
+    //               x   y         width                  height
+}
+
+
+document.querySelector("canvas").addEventListener('mousedown', e => {
+    //console.log("clic appuyé")
+    fishingStrengthInterval = setInterval(()=>{
+        fishingRod.strength += 12
+        if (fishingRod.strength > 1175){ 
+            fishingRod.strength = 1175
+            clearInterval(fishingStrengthInterval)
+        }
+        updateStrengthUI()
+    }, 16)
+
+    
+});
+
+document.querySelector("canvas").addEventListener('mouseup', e => {
+    //console.log("clic laché")
+    clearInterval(fishingStrengthInterval)
+    // Zone bac - x180 & y400 pos min -- x1175 & y695 pos max
+    fishingRod.strength += 180
+
+    if (fishingRod.strength > 1175){ fishingRod.strength = 1175 }
+    console.log("strength = ", fishingRod.strength)
+
+    canvas.clearRect(130,70,((fishingRod.strength) / 4),    20)
+
+
+
+
+
+    fishingRod.strength = 0
+});
 
 start()
