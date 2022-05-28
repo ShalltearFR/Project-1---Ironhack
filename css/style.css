@@ -1,96 +1,96 @@
-@import url('https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz:wght@300&display=swap');
-
-
-
+@import url('https://fonts.googleapis.com/css2?family=Courgette&family=Lobster&display=swap');
 *{box-sizing: border-box;}
 body {margin:0;}
 header{position: relative;}
 body{background-color: #56587b;}
 
 @media(max-width:899px){
-    #TurnScreen{
-        font-size: 32px;
-        display: flex;
-        text-align: center;
-        align-items: center;
-        justify-content: center;
-        width: 100vw;
-        height: 100vh;
-        border: solid 1px black;
-    }
-
-    canvas, #StrengthTextBackground, #StrengthText h2, #Strength, #StrengthBackground{ display: none; }
+  #TurnScreen{
+    font-size: 32px;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    border: solid 1px black;
+  }
+  canvas, #StrengthTextBackground, #StrengthText h2, #Strength, #StrengthBackground{ display: none; }
 }
 
 @media(min-width:900px){
-    #TurnScreen{
-        display: none;
-    }
+  #TurnScreen{
+    display: none;
+  }
 
-    canvas{
-        display: block;
-        width: 100vw;
-        object-fit:contain;
-        z-index: 1;
-    }
+  canvas{
+    display: block;
+    width: 100vw;
+    object-fit:contain;
+    z-index: 1;
+  }
 
-    #StrengthBar {
-        display: block;      
-        width: 500px;
-        border: solid 1px gray;
-        border-radius: 10px;
-        height: 25px;
-        background: linear-gradient(90deg, green, yellow, red);
-      }
+  #GlobalStrength{
+    position: absolute;
+    top: 10%;
+    left: 25%;
+  }
 
-    #StrengthTextBackground{
-        z-index: 0;
-        margin: 0;
-        top: 6%;
-        left: 27%;
-        position:absolute;
-        width: 150px;
-        height: 35px;
-        border-radius: 20px;
-        background: linear-gradient(180deg, white, gray);;
+  #StrengthBar {
+    display: block;      
+    width: 500px;
+    border: solid 1px gray;
+    border-radius: 10px;
+    height: 25px;
+    background: linear-gradient(90deg, green, yellow, red);
+  }
 
-        border: solid 1px gray;
-    }
-    #StrengthText h2{
-        top: 6%;
-        left: 27%;
-        z-index: 10;
-        font-family: 'Yanone Kaffeesatz', sans-serif;
-        ffont-size: 28px;
-        margin: 0;
-        position: absolute;
-        width: 150px;
-        height: 35px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        ttop: -40px;
-        bborder: solid 1px black;
-    }
+  #StrengthTextBackground{
+    z-index: 0;
+    margin: 0;
+    top: -20px;
+    left: 50px;
+    position:absolute;
+    width: 150px;
+    height: 35px;
+    border-radius: 20px;
+    background: linear-gradient(180deg, lightblue,white);
+    border: solid 1px gray;
+    border-bottom: none;
+  }
+
+  #StrengthText h2{
+    top: -25px;
+    left: 50px;
+    z-index: 10;
+    font-family: 'Courgette', cursive;
+    font-size: 18px;
+    margin: 0;
+    position: absolute;
+    width: 150px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-shadow: rgb(255, 0, 0) 1px 0 15px;
+  }
       
-      #Strength {
-        width: 0;
-        overflow: hidden;
-        position: absolute;
-        top: 10%;
-        left: 25%;
-        border-radius: 50px;
-      }
+  #Strength {
+    width: 0;
+    overflow: hidden;
+    position: absolute;
+    border-radius: 50px;
+  }
 
-      #StrengthBackground{
-        display: block;      
-        width: 500px;
-        border: solid 1px lightblue;
-        border-radius: 10px;
-        height: 25px;
-        background: gray;
-        position: absolute;
-        top: 10%;
-        left: 25%;
-      }
+  #StrengthBackground{
+    display: block;      
+    width: 500px;
+    border: solid 1px lightblue;
+    border-radius: 10px;
+    height: 25px;
+    background: gray;
+    position: absolute;
+    top: 10%;
+    left: 25%;
+  }
 }
