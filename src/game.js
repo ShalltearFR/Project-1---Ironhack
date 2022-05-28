@@ -5,14 +5,16 @@ let fishList = []
 const gametick = new GameTick()
 let gameTickInterval
 const spawnLimit = 20
-const fishingRod = new (FishingRod)
+const fishingRod = new FishingRod()
 let fishingStrengthInterval
 
 const background = new Image()
 background.src = "https://res.cloudinary.com/shalltear/image/upload/v1653559679/background_dxb3v0.png"
 
-const strengthBarImg = new Image()
-strengthBarImg.src = "https://res.cloudinary.com/shalltear/image/upload/v1653664854/Barre_de_force_xd7gdm.png"
+const strengthBar = document.querySelector("#Strength")
+
+//const strengthBarImg = new Image()
+//strengthBarImg.src = "https://res.cloudinary.com/shalltear/image/upload/v1653664854/Barre_de_force_xd7gdm.png"
 
 function start(){ // Demarre le jeu
     backgroundLoading()
@@ -29,6 +31,7 @@ function backgroundLoading(){ // Chargement de l'arrière plan du jeu
  function fishSpawn(){ // Fait spawner les poissons
     let fish = new Fish()
     let img = new Image()
+    
     let spawnResult = fish.spawn()
     let position = {
         x: spawnResult[0],
@@ -55,9 +58,9 @@ function backgroundLoading(){ // Chargement de l'arrière plan du jeu
                         img.onload = ()=>{
                             // Zone bac - x180 & y400 pos min -- x1175 & y695 pos max
                             canvas.drawImage(img, position.x,position.y)
-                            //canvas.strokeRect(position.x - 50, position.y, fish.width + (2 * 50), fish.height); // Zone de deplacement max
-                            //canvas.strokeRect(position.x, position.y, 54, 21);  // Hitbox
-                            fishList.push(fish)                              
+                            canvas.strokeRect(position.x - 50, position.y, fish.width + (2 * 50), fish.height); // Zone de deplacement max
+                            canvas.strokeRect(position.x, position.y, 54, 21);  // Hitbox
+                            fishList.push(fish)
                             fishSpawn()
                         }
                     } 
@@ -131,12 +134,13 @@ function fishAnimation(index, direction){ // Gère l'animation du poisson
 
 function updateStrengthUI(){
     //strengthBarImg.onload = ()=>{
-        //canvas.drawImage(strengthBarImg, 130,    70,            295,               70,    130    , 70   , ((fishingRod.strength) / 4),    70)
+        strengthBar.style.width = `${(fishingRod.strength / 2)}px`
 
-        //canvas.drawImage(strengthBarImg, 130, 70, 295, 70, 130, 70, ((fishingRod.strength) / 4), 70)
-        canvas.drawImage(strengthBarImg, 130, 70, ((fishingRod.strength) / 4), 20)
+        //canvas.drawImage(strengthBarImg, 130, 70, 295, 70, 130, 70, (fishingRod.strength / 4), 70)
+        //canvas.drawImage(strengthBarImg, 130, 70, ((fishingRod.strength) / 4), 20)
 
-        //                   src          sx    sy        swidth                sheight   dx         dy          dwidth                sheight
+        //canvas.drawImage(strengthBarImg, 130,    70,            295,               70,    130    , 70   , (fishingRod.strength / 4),    70)
+        //                   src          sx    sy        swidth            sheight      dx         dy          dwidth                dheight
     //}
     //canvas.fillRect(130,70,((fishingRod.strength) / 4),    20)
     //               x   y         width                  height
@@ -145,6 +149,8 @@ function updateStrengthUI(){
 
 document.querySelector("canvas").addEventListener('mousedown', e => {
     //console.log("clic appuyé")
+    strengthBar.style.width = "0px"
+
     fishingStrengthInterval = setInterval(()=>{
         fishingRod.strength += 12
         if (fishingRod.strength > 1175){ 
@@ -164,14 +170,9 @@ document.querySelector("canvas").addEventListener('mouseup', e => {
     fishingRod.strength += 180
 
     if (fishingRod.strength > 1175){ fishingRod.strength = 1175 }
-    console.log("strength = ", fishingRod.strength)
+    console.log("strength = ", fishingRod.strength)  
 
-    canvas.clearRect(130,70,((fishingRod.strength) / 4),    20)
-
-
-
-
-
+    strengthBar.style.width = "0px"
     fishingRod.strength = 0
 });
 

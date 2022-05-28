@@ -1,7 +1,14 @@
-body,html, div, canvas{margin :0; padding : 0; box-sizing: border-box;}
+@import url('https://fonts.googleapis.com/css2?family=Yanone+Kaffeesatz:wght@300&display=swap');
+
+
+
+*{box-sizing: border-box;}
+body {margin:0;}
+header{position: relative;}
 body{background-color: #56587b;}
+
 @media(max-width:899px){
-    div{
+    #TurnScreen{
         font-size: 32px;
         display: flex;
         text-align: center;
@@ -18,7 +25,7 @@ body{background-color: #56587b;}
 }
 
 @media(min-width:900px){
-    div{
+    #TurnScreen{
         display: none;
     }
 
@@ -26,5 +33,67 @@ body{background-color: #56587b;}
         display: block;
         width: 100vw;
         border: solid 1px red;
+        object-fit:contain;
+        z-index: 1;
     }
+
+    #StrengthBar {
+        display: block;      
+        width: 500px;
+        border: solid 1px lightblue;
+        border-radius: 10px;
+        height: 25px;
+        background: linear-gradient(90deg, green, yellow, red);
+      }
+
+    #StrengthTextBackground{
+        z-index: 0;
+        margin: 0;
+        top: 6%;
+        left: 27%;
+        position:absolute;
+        width: 150px;
+        height: 35px;
+        border-radius: 20px;
+        background-color: white;
+
+        border: solid 1px black;
+    }
+    #StrengthText h2{
+        top: 6%;
+        left: 27%;
+        z-index: 10;
+        font-family: 'Yanone Kaffeesatz', sans-serif;
+        ffont-size: 28px;
+        margin: 0;
+        position: absolute;
+        width: 150px;
+        height: 35px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        ttop: -40px;
+        bborder: solid 1px black;
+    }
+      
+      #Strength {
+        width: 0;
+        overflow: hidden;
+        position: absolute;
+        top: 10%;
+        left: 25%;
+        border-radius: 50px;
+      }
+
+      #StrengthBackground{
+        display: block;      
+        width: 500px;
+        border: solid 1px lightblue;
+        border-radius: 10px;
+        height: 25px;
+        background: gray;
+        position: absolute;
+        top: 10%;
+        left: 25%;
+      }
 }
