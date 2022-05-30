@@ -15,7 +15,7 @@ body{background-color: #56587b;}
     height: 100vh;
     border: solid 1px black;
   }
-  canvas, #StrengthTextBackground, #StrengthText h2, #Strength, #StrengthBackground{ display: none; }
+  #Game { display: none; }
 }
 
 @media(min-width:900px){
@@ -93,4 +93,19 @@ body{background-color: #56587b;}
     top: 10%;
     left: 25%;
   }
+}
+
+#Score{
+  font-family: 'Lobster', cursive;
+  width: 150px;
+  justify-content: center;
+  font-size: 24px;
+  display: flex;
+  position: absolute;
+  border: solid 1px black;
+  border-color: white;
+  border-radius: 10px;
+  background-color: rgba(0, 255, 213, 0.171);
+  top : 5%;
+  left: 80%;
 }

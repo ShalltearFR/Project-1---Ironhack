@@ -7,6 +7,7 @@ export class Fish{
         this.img = "https://res.cloudinary.com/shalltear/image/upload/v1653561601/fish_yotri0.png"
         this.isMoving = false
         this.moveDirection = this.movementDirection()
+        this.points = 50
         this.moveLimit = 
         {
             xMin : 0,
@@ -83,11 +84,17 @@ export class Score{
     }
 
     getScore(){
-        return this.score
+        if (this.score < 10){
+            return `Score : 000${this.score}`
+        }else if(this.score < 100){
+            return `Score : 00${this.score}`
+        }else if(this.score < 1000){
+            return `Score : 0${this.score}`
+        }
     }
 
-    addScore(){
-        this.score++
+    addScore(points){
+        this.score += points
     }
 }
 
@@ -95,6 +102,7 @@ export class FishingRod{
     constructor(){
         this.strength = 0
         this.isUsing = false
+        this.lock = false
         this.positionX = null
         this.positionY = null
         this.positionYMax = null
