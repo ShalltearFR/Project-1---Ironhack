@@ -336,7 +336,7 @@ function clickUp(){
         fishingRod.lock = true
         clearInterval(fishingStrengthInterval)
         // Zone bac - x180 & y400 pos min -- x1175 & y695 pos max
-        fishingRod.strength += 180
+        //fishingRod.strength += 180
     
         if (fishingRod.strength > 1175){ fishingRod.strength = 1175 }
         console.log("strength = ", fishingRod.strength)  
