@@ -2,6 +2,16 @@ import {Fish, Score, FishingRod, GameTick } from './class.js'
 
 const canvas = document.querySelector("canvas").getContext("2d")
 const scoreEl = document.querySelector("#Score")
+const timerEl = document.querySelector("#Timer")
+const mainMenuEl = document.querySelector("#MainMenu")
+const pageLoadEl = document.querySelector("#PageLoad")
+const gameOverEl = document.querySelector("#GameOver")
+
+const audio = new Audio("./src/music.mp3");
+audio.loop = true
+const audioEl = document.querySelector("#Audio")
+
+
 let fishList = []
 const gametick = new GameTick()
 let gameTickInterval
@@ -9,6 +19,10 @@ const spawnLimit = 20
 const fishingRod = new FishingRod()
 let fishingStrengthInterval
 const score = new Score()
+let timer = {
+    interval : null,
+    time : 0
+}
 
 const background = new Image()
 background.src = "https://res.cloudinary.com/shalltear/image/upload/v1653559679/background_dxb3v0.png"
@@ -17,14 +31,37 @@ const strengthBar = document.querySelector("#Strength")
 
 function start(){ // Demarre le jeu
     backgroundLoading()
+    startTimer()
     fishSpawn()
-    gameTickInterval = setInterval(gameTick, Math.floor((Math.random() * 800) + 20))      
+    gameTickInterval = setInterval(gameTick, Math.floor((Math.random() * 800) + 20))  
+    score.reset()
+    scoreEl.innerHTML = "Score : 0000"
 }
 
 function backgroundLoading(){ // Chargement de l'arrière plan du jeu
       background.onload = ()=>{
         canvas.drawImage(background, 0, 0, 1280, 720);
         }
+}
+
+function startTimer(){
+    timer.time = 60
+    timer.interval = setInterval(()=>{
+        timer.time--
+        if(timer.time > 0){
+            if (timer.time > 9){
+                timerEl.innerHTML = `Timer : ${timer.time}s`
+            } else{
+                timerEl.innerHTML = `Timer : 0${timer.time}s`
+            }
+        } else{
+            timerEl.innerHTML = `Timer : 00s`
+            clearInterval(timer.interval)
+            // Afficher la balise game Over
+            mainMenuEl.style.display = "flex"
+            gameOverEl.style.display = "block"
+        }
+    },1000)
 }
 
  function fishSpawn(){ // Fait spawner les poissons
@@ -239,6 +276,61 @@ document.querySelector("canvas").addEventListener('touchend', e => {
     clickUp()
 });
 
+
+function firstLoad(){
+    audio.play()
+    audioEl.style.display = "flex"
+    start()
+    mainMenuEl.style.display = "none"
+    pageLoadEl.style.display = "none"
+}
+document.querySelector("#MainMenu #PageLoad button").addEventListener('click', e => {
+    //console.log("clic laché")
+    firstLoad()
+});
+
+document.querySelector("#MainMenu #PageLoad button").addEventListener('touchend', e => {
+    //console.log("clic laché")
+    firstLoad()
+});
+
+function resetGame(){
+    start()
+    mainMenuEl.style.display = "none"
+    pageLoadEl.style.display = "none"
+}
+document.querySelector("#MainMenu #GameOver button").addEventListener('click', e => {
+    //console.log("clic laché")
+    resetGame()
+});
+
+document.querySelector("#MainMenu #GameOver button").addEventListener('touchend', e => {
+    //console.log("clic laché")
+    resetGame()
+});
+
+function changeMusic(){
+    const imgEl = audioEl.querySelector("img")
+    if (audio.muted){
+        console.log("play")
+        audio.muted = false
+        imgEl.src = "./src/soundPlay.png"
+    }else{
+        console.log("mute")
+        audio.muted = true
+        imgEl.src = "./src/soundMute.png"
+    }
+}
+audioEl.addEventListener('click', e => {
+    //console.log("clic laché")
+    changeMusic()
+});
+
+audioEl.addEventListener('touchend', e => {
+    //console.log("clic laché")
+    changeMusic()
+});
+
 function clickUp(){
     if (!fishingRod.isUsing && !fishingRod.lock){
         fishingRod.lock = true
@@ -271,5 +363,4 @@ function clearHook(){
     })
 }
 
-
-start()
+backgroundLoading()

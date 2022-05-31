@@ -96,6 +96,10 @@ export class Score{
     addScore(points){
         this.score += points
     }
+
+    reset(){
+        this.score = 0
+    }
 }
 
 export class FishingRod{

@@ -4,30 +4,44 @@
   <meta charset="utf-8">
   <title>Fishing Game</title>
   <link rel="stylesheet" href="./css/style.css">
-
 </head>
 <body>
     <header>
-      <div id="Game">
-      <div id="GlobalStrength">
-        <filter id="motion-blur-filter" filterUnits="userSpaceOnUse">
-          
-        <div id="StrengthTextBackground"></div>
-        <div id="StrengthBackground"></div>
-        <div id="Strength">
-          <span id="StrengthBar"></span>
+      <div id="Audio"><img src="./src/soundPlay.png"/></div>
+      <div id="MainMenu">
+        <div id="PageLoad">
+          <div id="Rules"><p><b>Catch as many fish as possible before the time runs out.</b></p>
+            <p>To cast the hook:</p>
+            <ul>
+            <li><p>PC: Mouse click</p></li>
+            <li><p>Mobile: Touch the screen</p></li>
+            </ul>
+          </div>
+          <button id="StartGame">Start Game</button>
         </div>
-        <div id="StrengthText">
-        
-          <h2>Strength</h2>
+        <div id="GameOver">
+          <h1>GAME OVER</h1>
+          <button>Retry</button>
         </div>
       </div>
-
-      <div id="Score">Score : 0000</div>
-      <canvas width="1280" height="720"></canvas>
-    </div>
-      
-      <div id="TurnScreen">Tournez l'ecran SVP</div>
+        <div id="Game">
+          <div id="Timer">Timer : 60s</div>
+          <div id="Score">Score : 0000</div>
+          <div id="GlobalStrength">          
+            <div id="StrengthTextBackground"></div>
+            <div id="StrengthBackground"></div>
+            <div id="Strength">
+              <span id="StrengthBar"></span>
+            </div>
+            <div id="StrengthText">
+              <h2>Strength</h2>
+            </div>
+          </div>
+          
+          <canvas width="1280" height="720"></canvas>
+        </div>
+        
+        <div id="TurnScreen">Tournez l'ecran SVP</div>
     </header>
 
 
