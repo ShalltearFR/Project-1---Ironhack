@@ -208,6 +208,15 @@ function updateStrengthUI(){
 
 document.querySelector("canvas").addEventListener('mousedown', e => {
     //console.log("clic appuyé")
+    clickDown()
+});
+
+document.querySelector("canvas").addEventListener('touchstart', e => {
+    //console.log("clic appuyé")
+    clickDown()
+});
+
+function clickDown(){
     if (!fishingRod.isUsing && !fishingRod.lock){
         fishingStrengthInterval = setInterval(()=>{
             fishingRod.strength += 12
@@ -218,11 +227,19 @@ document.querySelector("canvas").addEventListener('mousedown', e => {
             updateStrengthUI()
         }, 16)
     }
-});
+}
 
 document.querySelector("canvas").addEventListener('mouseup', e => {
     //console.log("clic laché")
+    clickUp()
+});
 
+document.querySelector("canvas").addEventListener('touchend', e => {
+    //console.log("clic laché")
+    clickUp()
+});
+
+function clickUp(){
     if (!fishingRod.isUsing && !fishingRod.lock){
         fishingRod.lock = true
         clearInterval(fishingStrengthInterval)
@@ -239,7 +256,7 @@ document.querySelector("canvas").addEventListener('mouseup', e => {
     } else if (!fishingRod.lock && fishingRod.isUsing){
         clearHook()
     }
-});
+}
 
 function clearHook(){
     fishingRod.isUsing = false
