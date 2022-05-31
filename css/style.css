@@ -26,8 +26,9 @@ body{background-color: #56587b; user-select: none;}
   canvas{
     display: block;
     width: 100vw;
+    height: 100vh;
     object-fit:contain;
-    z-index: 1;
+    zz-index: 0;
   }
 
   #GlobalStrength{
