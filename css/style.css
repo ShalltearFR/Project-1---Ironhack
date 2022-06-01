@@ -1,10 +1,194 @@
 @import url('https://fonts.googleapis.com/css2?family=Courgette&family=Lobster&family=Permanent+Marker&display=swap');
 *{box-sizing: border-box;}
 body {margin:0;}
-header{position: relative;}
+hheader{position: relative;}
 body{background-color: #56587b; user-select: none;}
 
-@media(max-width:899px){
+
+
+#TurnScreen, #GameOver{
+  display: none;
+}
+
+header{
+  border: solid 1px greenyellow;
+  position: relative;
+  display: inline-block;
+}
+
+canvas{
+  display: block;
+  border: solid 1px red;
+  max-width: 1280px;
+  max-height: 720px;
+}
+
+#GlobalStrength{
+  position: absolute;
+  top: 10%;
+  left: 25%;
+}
+
+#StrengthBar {
+  display: block;      
+  width: 500px;
+  border: solid 1px gray;
+  border-radius: 10px;
+  height: 25px;
+  background: linear-gradient(90deg, green, yellow, red);
+}
+
+#StrengthTextBackground{
+  z-index: 0;
+  margin: 0;
+  top: -20px;
+  left: 50px;
+  position:absolute;
+  width: 150px;
+  height: 35px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, lightblue,white);
+  border: solid 1px gray;
+  border-bottom: none;
+}
+
+#StrengthText h2{
+  top: -25px;
+  left: 50px;
+  z-index: 10;
+  font-family: 'Courgette', cursive;
+  font-size: 18px;
+  margin: 0;
+  position: absolute;
+  width: 150px;
+  height: 35px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-shadow: rgb(255, 0, 0) 1px 0 15px;
+}
+    
+#Strength {
+  width: 0;
+  overflow: hidden;
+  position: absolute;
+  border-radius: 50px;
+}
+
+#StrengthBackground{
+  display: block;      
+  width: 500px;
+  border: solid 1px lightblue;
+  border-radius: 10px;
+  height: 25px;
+  background: gray;
+  position: absolute;
+  top: 10%;
+  left: 25%;
+}
+
+#Score{
+  font-family: 'Lobster', cursive;
+  width: 150px;
+  justify-content: center;
+  font-size: 24px;
+  display: flex;
+  position: absolute;
+  border: solid 1px white;
+  border-radius: 10px;
+  background-color: rgba(0, 255, 213, 0.171);
+  top : 5%;
+  left: 80%;
+}
+
+#MainMenu{
+  z-index: 100;
+  display: flex;
+  position:absolute;
+  justify-content: center;
+  align-items: center;
+  border: solid 1px blue;
+  width: 100%;
+  height: 100%;
+  gap: 50px;
+  background-color: rgba(255, 255, 255, 0.473);
+}
+
+#PageLoad{
+  display:contents;
+}
+
+#Rules p{
+  font-family: 'Courgette', cursive;
+  font-size: 23px;
+}
+
+#PageLoad button{
+  font-family: 'Permanent Marker', cursive;
+  font-size: 24px;
+  background-color: rgba(13, 255, 0, 0.407);
+  text-shadow: #FC0 1px 0 10px;
+  border-radius: 25px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  right: auto;
+  width: 150px;
+  height: 100px;
+
+}
+
+#Timer{
+  display: flex;
+  position: absolute;
+  left: 5%;
+  top : 5%;
+  width: 140px;
+  font-size: 24px;
+  font-family: 'Courgette', cursive;
+  border: solid 1px white;
+  border-radius: 10px;
+  background-color: rgba(0, 255, 213, 0.171);
+  justify-content: center;
+
+}
+
+/* debuging 
+#PageLoad{
+  display: none;
+}
+*/
+
+#GameOver{
+  text-align: center;
+}
+
+#GameOver h1{
+  font-family: 'Permanent Marker', cursive;
+  font-size: 48px;
+  color: red;
+  text-shadow: 1px 1px 2px black;
+}
+
+#GameOver button{
+  width: 150px;
+  height: 50px;
+  font-size: 24px;
+  font-family: 'Permanent Marker', cursive;
+  border-radius: 25px;
+  background-color: rgba(13, 255, 0, 0.407);
+  text-shadow: #FC0 1px 0 10px;
+}
+
+#Audio{
+  z-index: 300;
+  position: absolute;
+  display:none;
+  top: 15%;
+  left: 5%;
+}
+
+@media(max-width:900px){
   #TurnScreen{
     font-size: 32px;
     display: flex;
@@ -15,192 +199,5 @@ body{background-color: #56587b; user-select: none;}
     height: 100vh;
     border: solid 1px black;
   }
-  #Game, #MainMenu, #Audio{ display: none;}
+  #Game, #MainMenu, #Audio, canvas{ display: none;}
 }
-
-@media(min-width:900px){
-  #TurnScreen, #GameOver{
-    display: none;
-  }
-
-  header{
-    display: flex;
-    width: 100vw;
-    height: 100vh;
-    object-fit:cover;
-  }
-
-  canvas{
-    ddisplay: flex;
-    width: 100%;
-    height: 100%;
-    object-fit:contain;
-    zz-index: 0;
-  }
-
-  #GlobalStrength{
-    position: absolute;
-    top: 10%;
-    left: 25%;
-  }
-
-  #StrengthBar {
-    display: block;      
-    width: 500px;
-    border: solid 1px gray;
-    border-radius: 10px;
-    height: 25px;
-    background: linear-gradient(90deg, green, yellow, red);
-  }
-
-  #StrengthTextBackground{
-    z-index: 0;
-    margin: 0;
-    top: -20px;
-    left: 50px;
-    position:absolute;
-    width: 150px;
-    height: 35px;
-    border-radius: 20px;
-    background: linear-gradient(180deg, lightblue,white);
-    border: solid 1px gray;
-    border-bottom: none;
-  }
-
-  #StrengthText h2{
-    top: -25px;
-    left: 50px;
-    z-index: 10;
-    font-family: 'Courgette', cursive;
-    font-size: 18px;
-    margin: 0;
-    position: absolute;
-    width: 150px;
-    height: 35px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-shadow: rgb(255, 0, 0) 1px 0 15px;
-  }
-      
-  #Strength {
-    width: 0;
-    overflow: hidden;
-    position: absolute;
-    border-radius: 50px;
-  }
-
-  #StrengthBackground{
-    display: block;      
-    width: 500px;
-    border: solid 1px lightblue;
-    border-radius: 10px;
-    height: 25px;
-    background: gray;
-    position: absolute;
-    top: 10%;
-    left: 25%;
-  }
-
-  #Score{
-    font-family: 'Lobster', cursive;
-    width: 150px;
-    justify-content: center;
-    font-size: 24px;
-    display: flex;
-    position: absolute;
-    border: solid 1px white;
-    border-radius: 10px;
-    background-color: rgba(0, 255, 213, 0.171);
-    top : 5%;
-    left: 80%;
-  }
-  
-  #MainMenu{
-    z-index: 100;
-    position: absolute;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    border: solid 1px red;
-    width: 100%;
-    height: 100%;
-    gap: 50px;
-    background-color: rgba(255, 255, 255, 0.473);
-  }
-
-  #PageLoad{
-    display:contents;
-  }
-  
-  #Rules p{
-    font-family: 'Courgette', cursive;
-    font-size: 23px;
-  }
-  
-  #PageLoad button{
-    font-family: 'Permanent Marker', cursive;
-    font-size: 24px;
-    background-color: rgba(13, 255, 0, 0.407);
-    text-shadow: #FC0 1px 0 10px;
-    border-radius: 25px;
-    justify-content: center;
-    align-items: center;
-    display: flex;
-    right: auto;
-    width: 150px;
-    height: 100px;
-  
-  }
-
-  #Timer{
-    display: flex;
-    position: absolute;
-    left: 5%;
-    top : 5%;
-    width: 140px;
-    font-size: 24px;
-    font-family: 'Courgette', cursive;
-    border: solid 1px white;
-    border-radius: 10px;
-    background-color: rgba(0, 255, 213, 0.171);
-    justify-content: center;
-
-  }
-
-  /* debuging 
-  #PageLoad{
-    display: none;
-  }
-  */
-
-  #GameOver{
-    text-align: center;
-  }
-
-  #GameOver h1{
-    font-family: 'Permanent Marker', cursive;
-    font-size: 48px;
-    color: red;
-    text-shadow: 1px 1px 2px black;
-  }
-
-  #GameOver button{
-    width: 150px;
-    height: 50px;
-    font-size: 24px;
-    font-family: 'Permanent Marker', cursive;
-    border-radius: 25px;
-    background-color: rgba(13, 255, 0, 0.407);
-    text-shadow: #FC0 1px 0 10px;
-  }
-
-  #Audio{
-    z-index: 300;
-    position: absolute;
-    display:none;
-    top: 15%;
-    left: 5%;
-  }
-}
-
