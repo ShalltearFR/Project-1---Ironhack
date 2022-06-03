@@ -113,7 +113,7 @@ export class FishingRod{
         this.positionYMax = null
         this.soundFx = {
             launch : new Audio("./src/fx/hookLaunch.mp3"),
-            ploof : new Audio("./src/fx/HookPloof.mp3")
+            ploof : new Audio("./src/fx/hookPloof.mp3")
         }
     }
 
