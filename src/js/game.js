@@ -1,4 +1,4 @@
-import {Fish, Score, FishingRod, GameTick } from './class.js'
+import {Fish, Score, FishingRod, GameTick, WaterTile } from './class.js'
 
 const canvas = document.querySelector("canvas").getContext("2d")
 const scoreEl = document.querySelector("#Score")
@@ -7,10 +7,9 @@ const mainMenuEl = document.querySelector("#MainMenu")
 const pageLoadEl = document.querySelector("#PageLoad")
 const gameOverEl = document.querySelector("#GameOver")
 
-const audio = new Audio("./src/music.mp3");
-audio.loop = true
+const music = new Audio("./src/fx/music.mp3");
+music.loop = true
 const audioEl = document.querySelector("#Audio")
-
 
 let fishList = []
 const gametick = new GameTick()
@@ -25,7 +24,12 @@ let timer = {
 }
 
 const background = new Image()
-background.src = "https://res.cloudinary.com/shalltear/image/upload/v1653559679/background_dxb3v0.png"
+background.src = "./src/img/background.png"
+
+const waterTile = [new WaterTile(),new WaterTile(),new WaterTile()]
+waterTile[0].init(0)
+waterTile[1].init(1)
+waterTile[2].init(2)
 
 const strengthBar = document.querySelector("#Strength")
 
@@ -101,14 +105,11 @@ function startTimer(){
                         }
                     } 
                 } else{
-                    console.log("Espace deja occupé - Respawn d'un poisson")
                     fishSpawn()
                     break
                 }
             }
         }
-    } else if (spawnLimit === fishList.length){
-        console.log("Liste des poissons = ",fishList)
     }
 }
 
@@ -117,7 +118,7 @@ function gameTick(){ // Deplace un poisson aléatoire
 }
 
 function movefish(){
-    console.log("GAME TICK")
+    console.log("RANDOM TICK")
     let ramdomIndex = Math.floor(Math.random() * fishList.length) // Selectionne un poisson aleatoire
 
     if (!fishList[ramdomIndex].isMoving){ // Si le poisson n'est pas en mouvement
@@ -141,30 +142,33 @@ function movefish(){
 }
 
 function fishAnimation(index, direction){ // Gère l'animation du poisson
-    let img = new Image()
-    img.src = fishList[index].img
-
-    if (direction === "left" && !fishList[index].checkLimitMovement()){ // Si la direction est à gauche et que fishList[i].isMoving est actif
-        img.onload = ()=>{//         X                             Y                       width                  height
-            canvas.clearRect(fishList[index].positionX , fishList[index].positionY, fishList[index].width, fishList[index].height)
-            canvas.drawImage(img, fishList[index].positionX - 1,fishList[index].positionY) // Deplace le poisson dans la page HTML
-            fishList[index].updateAnimation("left") // Met à jour la position du poisson dans le tableau
+    try{
+        let img = new Image()
+        img.src = fishList[index].img
+    
+        if (direction === "left" && !fishList[index].checkLimitMovement()){ // Si la direction est à gauche et que fishList[i].isMoving est actif
+            img.onload = ()=>{//         X                             Y                       width                  height
+                canvas.clearRect(fishList[index].positionX , fishList[index].positionY, fishList[index].width, fishList[index].height)
+                canvas.drawImage(img, fishList[index].positionX - 1,fishList[index].positionY) // Deplace le poisson dans la page HTML
+                fishList[index].updateAnimation("left") // Met à jour la position du poisson dans le tableau
+            }
+        }else if (direction === "right" && !fishList[index].checkLimitMovement()){// Si la direction est à droite et que fishList[i].isMoving est actif
+            img.onload = ()=>{//         X                             Y                       width                  height
+                canvas.clearRect(fishList[index].positionX, fishList[index].positionY, fishList[index].width, fishList[index].height)
+                canvas.drawImage(img, fishList[index].positionX + 1,fishList[index].positionY) // Deplace le poisson dans la page HTML
+                fishList[index].updateAnimation("right") //Met à jour la position du poisson dans le tableau
+            }
         }
-    }else if (direction === "right" && !fishList[index].checkLimitMovement()){// Si la direction est à droite et que fishList[i].isMoving est actif
-        img.onload = ()=>{//         X                             Y                       width                  height
-            canvas.clearRect(fishList[index].positionX, fishList[index].positionY, fishList[index].width, fishList[index].height)
-            canvas.drawImage(img, fishList[index].positionX + 1,fishList[index].positionY) // Deplace le poisson dans la page HTML
-            fishList[index].updateAnimation("right") //Met à jour la position du poisson dans le tableau
+    
+        if (!fishList[index].checkLimitMovement()){ // Si le poisson n'est pas dans sa limite
+            requestAnimationFrame(() =>{
+                fishAnimation(index, direction) // Rejoue l'animation
+            })
         }
-    }
-
-    if (!fishList[index].checkLimitMovement()){ // Si le poisson n'est pas dans sa limite
-        requestAnimationFrame(() =>{
-            fishAnimation(index, direction) // Rejoue l'animation
-        })
-    }
-    if (fishList[index].checkLimitMovement()){ // Si le poisson est dans sa limite
-        fishList[index].isMoving = false // Rend de nouveau disponible le choix de direction du poisson
+        if (fishList[index].checkLimitMovement()){ // Si le poisson est dans sa limite
+            fishList[index].isMoving = false // Rend de nouveau disponible le choix de direction du poisson
+        }
+    } catch(err){
     }
 }
 
@@ -178,6 +182,7 @@ function hookLaunch(strength){
     // Debut du lancé x120 y285    xMax 1110
 
     v0 = strength / 10.6818
+    fishingRod.soundFx.launch.play()
     requestAnimationFrame(()=>{
         hookLaunchAnimation(0)
     })
@@ -191,11 +196,12 @@ function hookLaunchAnimation(x){ // Animation du lancé de hameçon
         })
     } else{
         fishingRod.positionY = y(x)
+        fishingRod.positionYMax = y(x) - 1
         fishingRod.positionX = x + 120
-        //console.log("fishing rod X =",fishingRod.positionX)
 
         fishingRod.lock = false
         fishingRod.isUsing = true
+        fishingRod.soundFx.ploof.play()
         hookGravity()
     }
 
@@ -205,17 +211,20 @@ function hookLaunchAnimation(x){ // Animation du lancé de hameçon
 
 function hookGravity(){ // Gravité du hameçon une fois plongé dans l'eau
     if (fishingRod.isUsing){
-        canvas.fillRect(fishingRod.positionX, fishingRod.positionY, 0.5,1)
-        //console.log(fishingRod.positionY)
+        canvas.fillRect(fishingRod.positionX, fishingRod.positionYMax, 0.5,fishingRod.positionY - fishingRod.positionYMax)
+        canvas.fillStyle = "#f00000"
+        canvas.fillRect(fishingRod.positionX, fishingRod.positionY - 2, 0.5,2)
+        canvas.fillStyle = "black"
+
         if (fishingRod.positionY <= 700){ //695
             for (let i = 0; i < fishList.length; i++)
             {
                 if (fishingRod.isTouch(fishList[i])){
-                    //console.log("féré", fishingRod.positionY, fishList[i].positionY)
                     score.addScore(fishList[i].points)
                     scoreEl.innerHTML = score.getScore()
                     fishList.splice(i,1)
                     clearHook()
+                    score.sound.play()
                 }
             }
             fishingRod.positionY += 0.5
@@ -244,12 +253,10 @@ function updateStrengthUI(){
 }
 
 document.querySelector("canvas").addEventListener('mousedown', e => {
-    //console.log("clic appuyé")
     clickDown()
 });
 
 document.querySelector("canvas").addEventListener('touchstart', e => {
-    //console.log("clic appuyé")
     clickDown()
 });
 
@@ -267,30 +274,27 @@ function clickDown(){
 }
 
 document.querySelector("canvas").addEventListener('mouseup', e => {
-    //console.log("clic laché")
     clickUp()
 });
 
 document.querySelector("canvas").addEventListener('touchend', e => {
-    //console.log("clic laché")
     clickUp()
 });
 
 
 function firstLoad(){
-    audio.play()
+    music.play()
     audioEl.style.display = "flex"
     start()
     mainMenuEl.style.display = "none"
     pageLoadEl.style.display = "none"
+    setInterval(waterAnim, 1000)
 }
 document.querySelector("#MainMenu #PageLoad button").addEventListener('click', e => {
-    //console.log("clic laché")
     firstLoad()
 });
 
 document.querySelector("#MainMenu #PageLoad button").addEventListener('touchend', e => {
-    //console.log("clic laché")
     firstLoad()
 });
 
@@ -300,34 +304,36 @@ function resetGame(){
     pageLoadEl.style.display = "none"
 }
 document.querySelector("#MainMenu #GameOver button").addEventListener('click', e => {
-    //console.log("clic laché")
+    clearInterval(gameTickInterval)
     resetGame()
 });
 
 document.querySelector("#MainMenu #GameOver button").addEventListener('touchend', e => {
-    //console.log("clic laché")
+    clearInterval(gameTickInterval)
     resetGame()
 });
 
 function changeMusic(){
     const imgEl = audioEl.querySelector("img")
-    if (audio.muted){
-        console.log("play")
-        audio.muted = false
-        imgEl.src = "./src/soundPlay.png"
+    if (music.muted){
+        music.muted = false
+        fishingRod.soundFx.launch.muted = false
+        fishingRod.soundFx.ploof.muted = false
+        score.sound.muted = false
+        imgEl.src = "./src/img/soundPlay.png"
     }else{
-        console.log("mute")
-        audio.muted = true
-        imgEl.src = "./src/soundMute.png"
+        music.muted = true
+        fishingRod.soundFx.launch.muted = true
+        fishingRod.soundFx.ploof.muted = true
+        score.sound.muted = true
+        imgEl.src = "./src/img/soundMute.png"
     }
 }
 audioEl.addEventListener('click', e => {
-    //console.log("clic laché")
     changeMusic()
 });
 
 audioEl.addEventListener('touchend', e => {
-    //console.log("clic laché")
     changeMusic()
 });
 
@@ -336,11 +342,8 @@ function clickUp(){
         fishingRod.lock = true
         clearInterval(fishingStrengthInterval)
         // Zone bac - x180 & y400 pos min -- x1175 & y695 pos max
-        //fishingRod.strength += 180
-    
-        if (fishingRod.strength > 1175){ fishingRod.strength = 1175 }
-        console.log("strength = ", fishingRod.strength)  
-    
+
+        if (fishingRod.strength > 1175){ fishingRod.strength = 1175 }  
         hookLaunch(fishingRod.strength)
         strengthBarEndAnimation(fishingRod.strength)
         fishingRod.strength = 0
@@ -361,6 +364,18 @@ function clearHook(){
             canvas.drawImage(img, el.positionX,el.positionY) // Ré-affiche les poissons
         }
     })
+}
+
+function waterAnim(){
+    // Repeter 36 fois
+    let x = 128
+    canvas.clearRect(128,375,1152,32)
+    for (let i = 0; i < 36; i++){
+        let random = Math.floor(Math.random() * waterTile.length)
+        canvas.drawImage(waterTile[random].img, x,376,32,31)
+        x+= 32
+
+    }
 }
 
 backgroundLoading()

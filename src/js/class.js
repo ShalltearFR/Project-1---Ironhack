@@ -4,7 +4,7 @@ export class Fish{
         this.height = 21
         this.positionX = null
         this.positionY = null
-        this.img = "https://res.cloudinary.com/shalltear/image/upload/v1653561601/fish_yotri0.png"
+        this.img = "./src/img/fish/01/01.png"
         this.isMoving = false
         this.moveDirection = this.movementDirection()
         this.points = 50
@@ -81,6 +81,7 @@ export class Fish{
 export class Score{
     constructor(){
         this.score = 0
+        this.sound = new Audio("./src/fx/score.mp3");
     }
 
     getScore(){
@@ -110,6 +111,10 @@ export class FishingRod{
         this.positionX = null
         this.positionY = null
         this.positionYMax = null
+        this.soundFx = {
+            launch : new Audio("./src/fx/hookLaunch.mp3"),
+            ploof : new Audio("./src/fx/HookPloof.mp3")
+        }
     }
 
     isTouch(fish){
@@ -130,5 +135,22 @@ export class GameTick{
     random(){
         let random = ((16 * 60 ) * 3) + Math.floor(Math.random() * ((16 * 60) * 10))
         return random
+    }
+}
+
+export class WaterTile{
+    constructor(){
+        this.width = 32
+        this.height = 31
+        this.imgList = [
+            "./src/img/WaterTile/01.png",
+            "./src/img/WaterTile/02.png",
+            "./src/img/WaterTile/03.png",
+        ]
+        this.img = new Image()
+    }
+
+    init(i){
+        this.img.src = this.imgList[i]
     }
 }
