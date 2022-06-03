@@ -143,9 +143,9 @@ export class WaterTile{
         this.width = 32
         this.height = 31
         this.imgList = [
-            "./src/img/WaterTile/01.png",
-            "./src/img/WaterTile/02.png",
-            "./src/img/WaterTile/03.png",
+            "./src/img/waterTile/01.png",
+            "./src/img/waterTile/02.png",
+            "./src/img/waterTile/03.png",
         ]
         this.img = new Image()
     }
