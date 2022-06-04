@@ -1,4 +1,4 @@
-# Not compatible with mobile
+# Not compatible with mobile ("double clic" bug)
 
 ### Credit
 
