@@ -1,3 +1,5 @@
+# Not compatible with mobile ("double clic" bug)
+
 ### Credit
 
 - Fishing asset :  [https://craftpix.net/freebies/free-fishing-game-assets-pixel-art-pack](https://craftpix.net/freebies/free-fishing-game-assets-pixel-art-pack)
