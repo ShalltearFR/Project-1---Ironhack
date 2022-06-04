@@ -140,42 +140,43 @@ function movefish(){
         if (direction === "left"){ 
             // Dirige le poisson vers la gauche
                 requestAnimationFrame(() =>{
-                    fishAnimation(ramdomIndex, "left")
+                    fishAnimation(ramdomIndex, "left", fishList[ramdomIndex].uid)
                 })
                 fishList[ramdomIndex].isMoving = true
             // } 
         } else if (direction === "right"){
             // Dirige le poisson vers la droite
             requestAnimationFrame(() =>{
-                fishAnimation(ramdomIndex, "right")
+                fishAnimation(ramdomIndex, "right", fishList[ramdomIndex].uid)
             })
             fishList[ramdomIndex].isMoving = true
         }
     } 
 }
 
-function fishAnimation(index, direction){ // Gère l'animation du poisson
-    try{  
-        if (direction === "left" && !fishList[index].checkLimitMovement()){ // Si la direction est à gauche et que fishList[i].isMoving est actif
+function fishAnimation(index, direction, uid){ // Gère l'animation du poisson
+    try{
+        if (fishList[index].uid = uid){
+            if (direction === "left" && !fishList[index].checkLimitMovement()){ // Si la direction est à gauche et que fishList[i].isMoving est actif
                             //          X                             Y                       width                  height
                 canvas.clearRect(fishList[index].positionX , fishList[index].positionY, fishList[index].width, fishList[index].height)
                 canvas.drawImage(fishList[index].img, fishList[index].positionX - 1,fishList[index].positionY) // Deplace le poisson dans la page HTML
                 fishList[index].updateAnimation("left") // Met à jour la position du poisson dans le tableau
             // }
-        }else if (direction === "right" && !fishList[index].checkLimitMovement()){// Si la direction est à droite et que fishList[i].isMoving est actif
+            }else if (direction === "right" && !fishList[index].checkLimitMovement()){// Si la direction est à droite et que fishList[i].isMoving est actif
                             //          X                             Y                       width                  height
                 canvas.clearRect(fishList[index].positionX, fishList[index].positionY, fishList[index].width, fishList[index].height)
                 canvas.drawImage(fishList[index].img, fishList[index].positionX + 1,fishList[index].positionY) // Deplace le poisson dans la page HTML
                 fishList[index].updateAnimation("right") //Met à jour la position du poisson dans le tableau
-        }
+            }
     
-        if (!fishList[index].checkLimitMovement()){ // Si le poisson n'est pas dans sa limite
-            requestAnimationFrame(() =>{
-                fishAnimation(index, direction) // Rejoue l'animation
-            })
-        }
-        if (fishList[index].checkLimitMovement()){ // Si le poisson est dans sa limite
-            fishList[index].isMoving = false // Rend de nouveau disponible le choix de direction du poisson
+            if (!fishList[index].checkLimitMovement()){ // Si le poisson n'est pas dans sa limite
+                requestAnimationFrame(() =>{
+                    fishAnimation(index, direction, uid) // Rejoue l'animation
+                })
+            } else { // Si le poisson est dans sa limite
+                fishList[index].isMoving = false // Rend de nouveau disponible le choix de direction du poisson
+            }
         }
     } catch(err){
     }

@@ -10,6 +10,7 @@ export class Fish{
             xMin : 0,
             xMax : 0
         }
+        this.uid = Math.random() * 10
     }
 
     spawn(){
