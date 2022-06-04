@@ -194,6 +194,29 @@ canvas{
   background-image: url("../src/img/backgroundSite.jpg");  
 }
 
+#GetSource{
+  display: flex;
+  z-index: 300;
+  position: fixed;
+  font-family: 'Permanent Marker', cursive;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  width: 130px;
+  height: 30px;
+  border-radius: 50px;
+  background-color: rgba(255, 255, 255, 0.479);
+  
+  top: calc(100vh - 75px);
+  left: calc(100vw - 200px);
+  border: solid 1px;
+}
+
+#GetSource a{
+  text-decoration: none;
+  color: rgb(0, 157, 255);
+}
+
 @media(max-width:1279px){
   #TurnScreen{
     font-family: 'Permanent Marker', cursive;
@@ -206,5 +229,5 @@ canvas{
     height: 100vh;
     border: solid 1px black;
   }
-  #Game, #MainMenu, #Audio, canvas, #Background{ display: none;}
+  #Game, #MainMenu, #Audio, canvas, #Background, #GetSource{ display: none;}
 }
