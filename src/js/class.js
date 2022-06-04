@@ -1,13 +1,10 @@
 export class Fish{
     constructor(){
-        this.width = 54
-        this.height = 21
         this.positionX = null
         this.positionY = null
-        this.img = "./src/img/fish/01/01.png"
         this.isMoving = false
+        this.img = this.initImage()
         this.moveDirection = this.movementDirection()
-        this.points = 50
         this.moveLimit = 
         {
             xMin : 0,
@@ -19,7 +16,7 @@ export class Fish{
         let randomX = (Math.floor(Math.random() * 950) + 180)
         this.positionX = randomX
 
-        let randomY = (Math.floor(Math.random() * 265) + 400)
+        let randomY = (Math.floor(Math.random() * 255) + 410)
         this.positionY = randomY
 
         this.moveLimit.xMin = this.positionX - 50
@@ -78,6 +75,66 @@ export class Fish{
     }
 }
 
+export class FishType1 extends Fish{
+    constructor(){
+        super()
+        this.width = 54
+        this.height = 21
+        this.points = 50
+    }
+
+    initImage(){
+        const image = new Image()
+        image.src = "./src/img/fish/01/1.png"
+        return image
+    }
+}
+
+export class FishType2 extends Fish{
+    constructor(){
+        super()
+        this.width = 26
+        this.height = 12
+        this.points = 150
+    }
+
+    initImage(){
+        const image = new Image()
+        image.src = "./src/img/fish/02/1.png"
+        return image
+        }
+}
+
+export class FishType3 extends Fish{
+    constructor(){
+        super()
+        this.width = 30
+        this.height = 12
+        this.points = 125
+    }
+
+    initImage(){
+        const image = new Image()
+        image.src = "./src/img/fish/03/1.png"
+        return image
+    }
+}
+
+export class FishType4 extends Fish{
+    constructor(){
+        super()
+        this.width = 20
+        this.height = 12
+        this.points = 175
+    }
+
+    initImage(){
+        const image = new Image()
+        image.src = "./src/img/fish/04/1.png"
+        return image
+    }
+}
+
 export class Score{
     constructor(){
         this.score = 0
@@ -91,6 +148,8 @@ export class Score{
             return `Score : 00${this.score}`
         }else if(this.score < 1000){
             return `Score : 0${this.score}`
+        } else{
+            return `Score : ${this.score}`
         }
     }
 
@@ -142,15 +201,43 @@ export class WaterTile{
     constructor(){
         this.width = 32
         this.height = 31
-        this.imgList = [
-            "./src/img/waterTile/01.png",
-            "./src/img/waterTile/02.png",
-            "./src/img/waterTile/03.png",
+        this.img = [
+            this.init(1),
+            this.init(2),
+            this.init(3),
         ]
-        this.img = new Image()
     }
 
     init(i){
-        this.img.src = this.imgList[i]
+        const image = new Image()
+        image.src = `./src/img/waterTile/${i}.png`
+        return image
+    }
+}
+
+export class FisherMan{
+    constructor(){
+        this.isMoving = false
+        this.moving = [
+            this.init("moving", 1),
+            this.init("moving", 2),
+            this.init("moving", 3),
+            this.init("moving", 4),
+            this.init("moving", 5),
+            this.init("moving", 6)
+        ]
+        this.idle = [
+            this.init("idle", 1),
+            this.init("idle", 2),
+            this.init("idle", 3),
+            this.init("idle", 4)
+        ]
+    }
+
+    init(state, i){
+        const image = new Image()
+        image.src = `./src/img/fisherMan/${state}/${i}.png`
+        return image
+        
     }
 }

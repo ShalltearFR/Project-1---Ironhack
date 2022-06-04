@@ -88,6 +88,7 @@ canvas{
 }
 
 #Score{
+  z-index: 300;
   font-family: 'Lobster', cursive;
   width: 150px;
   justify-content: center;
@@ -138,6 +139,7 @@ canvas{
 }
 
 #Timer{
+  z-index: 300;
   display: flex;
   position: absolute;
   left: 5%;
@@ -189,8 +191,7 @@ canvas{
   background-repeat:round;
   width: 100vw;
   height: 100vh;
-  background-image: url("../src/img/backgroundSite.jpg");
-  
+  background-image: url("../src/img/backgroundSite.jpg");  
 }
 
 @media(max-width:1279px){
