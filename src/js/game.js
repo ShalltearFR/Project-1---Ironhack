@@ -269,7 +269,7 @@ function hookLaunchAnimation(x){ // Animation du lancé de hameçon
         fishingRod.soundFx.ploof.play()
         hookGravity()
     }
-
+    canvas.fillStyle = "black";
     canvas.fillRect(x + 107, y(x), 2,1)
 }
 
@@ -280,15 +280,17 @@ function hookGravity(){ // Gravité du hameçon une fois plongé dans l'eau
         canvas.fillRect(fishingRod.positionX, fishingRod.positionY - 2, 0.5,2)
         canvas.fillStyle = "black"
 
-        if (fishingRod.positionY <= 700){ //695
+        if (fishingRod.positionY <= 700){
             for (let i = 0; i < fishList.length; i++)
             {
-                if (fishingRod.isTouch(fishList[i])){
-                    score.addScore(fishList[i].points)
+                if (fishingRod.isTouch(fishList[i])){ // Fait gagner des points si le poisson est touché
+                    const points = fishList[i].points
+                    score.addScore(points)
                     scoreEl.innerHTML = score.getScore()
+                    score.sound.play()
                     fishList.splice(i,1)
                     clearHook()
-                    score.sound.play()
+                    animPoints(points,255,0)
                 }
             }
             fishingRod.positionY += 0.5
@@ -428,6 +430,25 @@ function waterAnim(){
         let random = Math.floor(Math.random() * waterTile.img.length)
         canvas.drawImage(waterTile.img[random], x,376,32,31)
         x+= 32
+    }
+}
+
+function animPoints(points, y, alpha){
+    if (alpha <= 1){
+        canvas.font = "38px VT323"
+        canvas.textAlign = "center"
+        canvas.clearRect(50, 200, 100, 55)
+        canvas.fillStyle = "rgba(255, 100, 0, " + alpha + ")";
+        canvas.fillText(`+${points}`, 100, y,50)
+        alpha += 0.03
+        y -= 0.3
+        setTimeout(()=>{
+            animPoints(points, y, alpha)
+        },10)
+    } else{
+        setTimeout(()=>{
+            canvas.clearRect(50, 200, 100, 55)
+        },1500)
     }
 }
 
