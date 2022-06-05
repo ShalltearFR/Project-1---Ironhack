@@ -26,6 +26,10 @@ let timer = {
 const background = new Image()
 background.src = "./src/img/background.png"
 
+const sun = new Image()
+sun.src = "./src/img/sun.png"
+
+
 const waterTile = new WaterTile()
 const strengthBar = document.querySelector("#Strength")
 
@@ -41,9 +45,12 @@ function start(){ // Demarre le jeu
 }
 
 function backgroundLoading(){ // Chargement de l'arrière plan du jeu
-      background.onload = ()=>{
+    background.onload = ()=>{
         canvas.drawImage(background, 0, 0, 1280, 720);
-        }
+    }
+    sun.onload = ()=>{
+        canvas.drawImage(sun,1100,75)
+    }
 }
 
 function startTimer(){
@@ -350,6 +357,7 @@ function firstLoad(){ // 1ere initialisation
     audioEl.style.display = "flex"
     start()
     fisherManIdleAnimation(0)
+    sunAnimation(75,"down")
     mainMenuEl.style.display = "none"
     pageLoadEl.style.display = "none"
     setInterval(waterAnim, 1000)
@@ -437,7 +445,7 @@ function animPoints(points, y, alpha){
     if (alpha <= 1){
         canvas.font = "38px VT323"
         canvas.textAlign = "center"
-        canvas.clearRect(50, 200, 100, 55)
+        canvas.clearRect(50, 200, 75, 55)
         canvas.fillStyle = "rgba(255, 100, 0, " + alpha + ")";
         canvas.fillText(`+${points}`, 100, y,50)
         alpha += 0.03
@@ -450,6 +458,21 @@ function animPoints(points, y, alpha){
             canvas.clearRect(50, 200, 100, 55)
         },1500)
     }
+}
+
+function sunAnimation(y, direction){
+    if (y < 80 && direction === "down"){ y += 0.35 }
+    if (y > 75 && direction === "up")  { y -= 0.35 }
+
+    if (y >= 80){direction = "up"}
+    if (y <= 75){direction = "down"}
+
+    canvas.clearRect(1100,75,100,200)
+    canvas.drawImage(sun,1100,y)
+
+    setTimeout(()=>{
+        sunAnimation(y, direction)
+    },65)
 }
 
 backgroundLoading()
