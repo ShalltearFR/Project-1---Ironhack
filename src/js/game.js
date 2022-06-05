@@ -1,11 +1,15 @@
 import {FishType1, FishType2, FishType3, FishType4, Score, FishingRod, GameTick, WaterTile, FisherMan} from './class.js'
 
 const canvas = document.querySelector("canvas").getContext("2d")
+const canvasGame = document.querySelector("canvas")
 const scoreEl = document.querySelector("#Score")
 const timerEl = document.querySelector("#Timer")
 const mainMenuEl = document.querySelector("#MainMenu")
 const pageLoadEl = document.querySelector("#PageLoad")
 const gameOverEl = document.querySelector("#GameOver")
+const strengthBarEl = document.querySelector("#Strength")
+const globalStrengthEl = document.querySelector("#GlobalStrength")
+const backgroundEl = document.querySelector("#Background")
 
 const music = new Audio("./src/fx/music.mp3");
 music.loop = true
@@ -22,6 +26,7 @@ let timer = {
     interval : null,
     time : 0
 }
+let GameoverAnimInterval
 
 const background = new Image()
 background.src = "./src/img/background.png"
@@ -29,13 +34,16 @@ background.src = "./src/img/background.png"
 const sun = new Image()
 sun.src = "./src/img/sun.png"
 
-
 const waterTile = new WaterTile()
-const strengthBar = document.querySelector("#Strength")
-
 const fisherMan = new FisherMan()
 
 function start(){ // Demarre le jeu
+    clearInterval(GameoverAnimInterval)
+    canvasGame.style.filter = "grayscale(0%)"
+    backgroundEl.style.filter = "grayscale(0%)"
+    scoreEl.style.filter = "grayscale(0%)"
+    timerEl.style.filter = "grayscale(0%)"
+    globalStrengthEl.style.filter = "grayscale(0%)"
     backgroundLoading()
     startTimer()
     fishSpawn()
@@ -69,6 +77,8 @@ function startTimer(){
             // Afficher la balise game Over
             mainMenuEl.style.display = "flex"
             gameOverEl.style.display = "block"
+            gameoverAlpha = 0
+            GameoverAnimInterval = setInterval(gameOverAnim,100)
         }
     },1000)
 }
@@ -309,7 +319,7 @@ function hookGravity(){ // Gravité du hameçon une fois plongé dans l'eau
 }
 
 function strengthBarEndAnimation(strength){ // Animation qui fait disparaitre progressivement la force après avoir lancé la canne à peche
-    strengthBar.style.width = `${(strength / 2)}px`
+    strengthBarEl.style.width = `${(strength / 2)}px`
 
     if (strength > 0){
         strength -= 12
@@ -317,12 +327,12 @@ function strengthBarEndAnimation(strength){ // Animation qui fait disparaitre pr
             strengthBarEndAnimation(strength)
         })
     } else{
-        strengthBar.style.width = `0px`
+        strengthBarEl.style.width = `0px`
     }
 }
 
 function updateStrengthUI(){
-    strengthBar.style.width = `${(fishingRod.strength / 2)}px`
+    strengthBarEl.style.width = `${(fishingRod.strength / 2)}px`
 }
 
 document.querySelector("canvas").addEventListener('mousedown', e => { 
@@ -414,7 +424,7 @@ function clickUp(){ // Lance la canne a peche
         hookLaunch(fishingRod.strength)
         strengthBarEndAnimation(fishingRod.strength)
         fishingRod.strength = 0
-        strengthBar.style.width = "0px"
+        strengthBarEl.style.width = "0px"
     } else if (!fishingRod.lock && fishingRod.isUsing){
         clearHook()
     }
@@ -475,4 +485,15 @@ function sunAnimation(y, direction){
     },65)
 }
 
+let gameoverAlpha = 0
+function gameOverAnim(){
+    if (gameoverAlpha < 100){
+        gameoverAlpha += 5
+        canvasGame.style.filter = `grayscale(${gameoverAlpha}%)`
+        backgroundEl.style.filter = `grayscale(${gameoverAlpha}%)`
+        scoreEl.style.filter = `grayscale(${gameoverAlpha}%)`
+        timerEl.style.filter = `grayscale(${gameoverAlpha}%)`
+        globalStrengthEl.style.filter = `grayscale(${gameoverAlpha}%)`
+    } else {clearInterval(GameoverAnimInterval)}
+}
 backgroundLoading()
