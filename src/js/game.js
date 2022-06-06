@@ -517,7 +517,7 @@ function waterSplatchAnimation(x, yMax, i, state){ // Joue l'animation de l'eau 
             requestAnimationFrame(()=>{
                 waterSplatchAnimation(x, yMax, i, state)
             })
-        },50)
+        },75)
     }else{ // Dessine les derniers tracés de la canne a peche à l'exterieur (sinon donne un effet de "fil cassé")
         for (let i = 0; i < 27; i+= 2.25){
             canvas.fillStyle = "black"

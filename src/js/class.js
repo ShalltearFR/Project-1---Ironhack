@@ -18,7 +18,7 @@ export class Fish{
         let randomX = (Math.floor(Math.random() * 950) + 180)
         this.positionX = randomX
 
-        let randomY = (Math.floor(Math.random() * 255) + 410)
+        let randomY = (Math.floor(Math.random() * 235) + 430)
         this.positionY = randomY
 
         this.moveLimit.xMin = this.positionX - 50
