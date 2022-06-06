@@ -287,7 +287,6 @@ function hookLaunchAnimation(x){ // Animation du lancé de hameçon
         fishingRod.positionYMax = y(x) - 1
         fishingRod.positionX = x + 107
 
-        fishingRod.lock = false
         fishingRod.isUsing = true
         fishingRod.soundFx.ploof.play()
         waterSplatchAnimation(fishingRod.positionX, fishingRod.positionYMax, 0,"begin")
@@ -524,6 +523,7 @@ function waterSplatchAnimation(x, yMax, i, state){ // Joue l'animation de l'eau 
             canvas.fillStyle = "black"
             canvas.fillRect((x - i), y(x - 107 - i), 2,1)
         }
+        fishingRod.lock = false
     }
 
 }
