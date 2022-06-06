@@ -1,5 +1,6 @@
-import {FishType1, FishType2, FishType3, FishType4, Score, FishingRod, GameTick, WaterTile, FisherMan} from './class.js'
+import {FishType1, FishType2, FishType3, FishType4, Score, FishingRod, GameTick, WaterTile, FisherMan, WaterSplatch} from './class.js'
 
+//#region Variables
 const canvas = document.querySelector("canvas").getContext("2d")
 const canvasGame = document.querySelector("canvas")
 const scoreEl = document.querySelector("#Score")
@@ -36,6 +37,9 @@ sun.src = "./src/img/sun.png"
 
 const waterTile = new WaterTile()
 const fisherMan = new FisherMan()
+const waterSplatch = new WaterSplatch()
+
+//#endregion 
 
 function start(){ // Demarre le jeu
     clearInterval(GameoverAnimInterval)
@@ -83,7 +87,7 @@ function startTimer(){
     },1000)
 }
 
-async function fishSpawn(){ // Fait spawner les poissons
+function fishSpawn(){ // Fait spawner les poissons
     let randomFish = Math.floor(Math.random() * 4)
     let fish = null
     
@@ -231,6 +235,7 @@ function fisherManMovingAnimation(i, strength){
     }
 }
 
+//#region Preload - Promise
 // function preload(src) {
 //     return new Promise(function (resolve, reject) {
 //         const img = document.createElement('img') // <img>
@@ -256,6 +261,7 @@ function fisherManMovingAnimation(i, strength){
 //     .catch(function (err) {
 //         console.log('oh noessssss')
 //     })
+//#endregion
 
 
 function fisherManIdleAnimation(i){
@@ -284,6 +290,7 @@ function hookLaunchAnimation(x){ // Animation du lancé de hameçon
         fishingRod.lock = false
         fishingRod.isUsing = true
         fishingRod.soundFx.ploof.play()
+        waterSplatchAnimation(fishingRod.positionX, fishingRod.positionYMax, 0,"begin")
         hookGravity()
     }
     canvas.fillStyle = "black";
@@ -430,17 +437,17 @@ function clickUp(){ // Lance la canne a peche
     }
 }
 
-function clearHook(){
+function clearHook(){  // Efface tout et remet l'image de background (après avoir peché un poisson ou après avoir annulé l'action de laisser couler le hameçon)
     fishingRod.isUsing = false
     fisherMan.isMoving = false
-    canvas.drawImage(background, 0, 0, 1280, 720); // Efface tout et remet l'image de background
+    canvas.drawImage(background, 0, 0, 1280, 720);
     fisherManIdleAnimation(0)
     fishList.forEach((el)=>{
         canvas.drawImage(el.img, el.positionX,el.positionY) // Ré-affiche les poissons
     })
 }
 
-function waterAnim(){
+function waterAnim(){ // Anime la surface de l'eau
     // Repeter 36 fois
     let x = 128
     canvas.clearRect(128,375,1152,32)
@@ -451,7 +458,7 @@ function waterAnim(){
     }
 }
 
-function animPoints(points, y, alpha){
+function animPoints(points, y, alpha){ // Effectue une petite animation indiquant les points gagnés au dessus du pecheur
     if (alpha <= 1){
         canvas.font = "38px VT323"
         canvas.textAlign = "center"
@@ -470,7 +477,7 @@ function animPoints(points, y, alpha){
     }
 }
 
-function sunAnimation(y, direction){
+function sunAnimation(y, direction){ // Deplace le soleil de haut en bas en boucle
     if (y < 80 && direction === "down"){ y += 0.35 }
     if (y > 75 && direction === "up")  { y -= 0.35 }
 
@@ -486,7 +493,7 @@ function sunAnimation(y, direction){
 }
 
 let gameoverAlpha = 0
-function gameOverAnim(){
+function gameOverAnim(){ // Obscurci l'arrière plan en noir et blanc
     if (gameoverAlpha < 100){
         gameoverAlpha += 5
         canvasGame.style.filter = `grayscale(${gameoverAlpha}%)`
@@ -495,5 +502,29 @@ function gameOverAnim(){
         timerEl.style.filter = `grayscale(${gameoverAlpha}%)`
         globalStrengthEl.style.filter = `grayscale(${gameoverAlpha}%)`
     } else {clearInterval(GameoverAnimInterval)}
+}
+
+function waterSplatchAnimation(x, yMax, i, state){ // Joue l'animation de l'eau qui eclabousse quand le hameçon tombe
+    canvas.clearRect(x - 25, yMax - 32, waterSplatch.width, waterSplatch.height)
+    if(state === "begin"){ i++ } // Fais un tour de l'index 0 -> 4
+    if (i === 4 && state === "begin"){ state = "medium"} // Une fois que l'index est à 4 -> defini le statut à medium
+
+    if (state === "medium") { i--} // Fais un tour de l'index 4 -> 0
+    if (i === 0 && state === "medium"){ state = "end"} // Une fois qu'il a fais son tour index 0 -> 4 et 4 -> 0, defini un etat de fin
+    if (state === "begin" || state === "medium"){canvas.drawImage(waterSplatch.img[i], x - 25, yMax - 32)}
+
+    if(state !== "end"){ // Reboucle
+        setTimeout(()=>{
+            requestAnimationFrame(()=>{
+                waterSplatchAnimation(x, yMax, i, state)
+            })
+        },50)
+    }else{ // Dessine les derniers tracés de la canne a peche à l'exterieur (sinon donne un effet de "fil cassé")
+        for (let i = 0; i < 27; i+= 2.25){
+            canvas.fillStyle = "black"
+            canvas.fillRect((x - i), y(x - 107 - i), 2,1)
+        }
+    }
+
 }
 backgroundLoading()

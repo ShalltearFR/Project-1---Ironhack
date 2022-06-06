@@ -1,3 +1,4 @@
+// Classe de base pour n'importe quel poisson
 export class Fish{
     constructor(){
         this.positionX = null
@@ -76,6 +77,7 @@ export class Fish{
     }
 }
 
+// Varie les poissons qui se basent sur la classe Fish
 export class FishType1 extends Fish{
     constructor(){
         super()
@@ -136,6 +138,7 @@ export class FishType4 extends Fish{
     }
 }
 
+// Tout ce qui touche au score est stocké ici
 export class Score{
     constructor(){
         this.score = 0
@@ -163,7 +166,8 @@ export class Score{
     }
 }
 
-export class FishingRod{
+// Interraction avec la canne à peche et permet de faire des detections avec la hitbox des poisson
+export class FishingRod{ 
     constructor(){
         this.strength = 0
         this.isUsing = false
@@ -187,7 +191,8 @@ export class FishingRod{
     }
  }
 
-export class GameTick{
+// Permet de generer un random qui deplacera un poisson aleatoirement
+export class GameTick{ 
     constructor(){
         this.time =  this.random()
     }
@@ -198,6 +203,7 @@ export class GameTick{
     }
 }
 
+// Regroupe les images des vagues d'eau
 export class WaterTile{
     constructor(){
         this.width = 32
@@ -216,6 +222,7 @@ export class WaterTile{
     }
 }
 
+// Regroupe les images du pecheur en etat "lancement du hameçon" ou en mode "repos"
 export class FisherMan{
     constructor(){
         this.isMoving = false
@@ -240,5 +247,25 @@ export class FisherMan{
         image.src = `./src/img/fisherMan/${state}/${i}.png`
         return image
         
+    }
+}
+
+// Regroupe les images de l'eau qui eclabousse - Sert pour animer le hameçon qui tombe dans l'eau
+export class WaterSplatch{
+    constructor(){
+        this.width = 50
+        this.height = 30
+        this.img = [
+            this.init(1),
+            this.init(2),
+            this.init(3),
+            this.init(4)
+        ]
+    }
+
+    init(i){
+        const image = new Image()
+        image.src = `./src/img/waterSplatch/${i}.png`
+        return image
     }
 }
