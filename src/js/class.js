@@ -269,3 +269,20 @@ export class WaterSplatch{
         return image
     }
 }
+
+export class Cloud{
+    constructor(x){
+        //this.randomX = (Math.random() * 1000) + 100
+        this.x = x
+        this.y = 10
+        this.width = 100
+        this.height = 51
+        this.img = this.initImage()
+    }
+
+    initImage(){
+        const image = new Image()
+        image.src = "./src/img/cloud.png"
+        return image
+    }
+}

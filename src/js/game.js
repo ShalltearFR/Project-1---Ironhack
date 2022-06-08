@@ -1,4 +1,4 @@
-import {FishType1, FishType2, FishType3, FishType4, Score, FishingRod, GameTick, WaterTile, FisherMan, WaterSplatch} from './class.js'
+import {FishType1, FishType2, FishType3, FishType4, Score, FishingRod, GameTick, WaterTile, FisherMan, WaterSplatch, Cloud} from './class.js'
 
 //#region Variables
 const canvas = document.querySelector("canvas").getContext("2d")
@@ -38,6 +38,7 @@ sun.src = "./src/img/sun.png"
 const waterTile = new WaterTile()
 const fisherMan = new FisherMan()
 const waterSplatch = new WaterSplatch()
+let cloudList = [new Cloud(170), new Cloud(420), new Cloud(630), new Cloud(800), new Cloud(1100)]
 
 //#endregion 
 
@@ -377,6 +378,7 @@ function firstLoad(){ // 1ere initialisation
     mainMenuEl.style.display = "none"
     pageLoadEl.style.display = "none"
     setInterval(waterAnim, 1000)
+    setInterval(cloudAnim, 16)
 }
 document.querySelector("#MainMenu #PageLoad button").addEventListener('click', e => {
     firstLoad() 
@@ -528,3 +530,22 @@ function waterSplatchAnimation(x, yMax, i, state){ // Joue l'animation de l'eau 
 
 }
 backgroundLoading()
+
+function cloudAnim(){
+    if (cloudList.length < 5){
+        let cloud = new Cloud()
+        cloud.x = 1280
+        cloudList.push(cloud)
+    }
+    for (let i = 0; i < cloudList.length; i++){
+        if (cloudList[i].x < -200){
+            cloudList.splice(i,1)
+        }
+    }
+
+    cloudList.forEach((el)=>{
+        canvas.clearRect(el.x, el.y, el.width, el.height)
+        el.x -=0.15
+        canvas.drawImage(el.img, el.x, el.y, el.width, el.height)
+    });
+}
