@@ -119,7 +119,7 @@ function fishSpawn(){ // Fait spawner les poissons
                 // 180 & 400 pos min -- 1175 & 695 pos max
                 canvas.drawImage(fish.img, position.x,position.y)
                 //canvas.strokeRect(position.x - 50, position.y, fish.width + (2 * 50), fish.height); // Zone de deplacement max
-                //canvas.strokeRect(position.x, position.y, 54, 21);  // Hitbox
+                //canvas.strokeRect(position.x, position.y, fish.width, fish.height);  // Hitbox
                 fishList.push(fish)
                 fishSpawn()
             } 
